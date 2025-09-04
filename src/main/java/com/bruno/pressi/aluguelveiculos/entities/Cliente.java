@@ -3,6 +3,7 @@ package com.bruno.pressi.aluguelveiculos.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,7 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Cliente {
 
     @Id
-    private Long id;
+    private ObjectId id;
 
     @Field("nome_completo")
     private String nomeCompleto;
@@ -28,7 +29,7 @@ public class Cliente {
 
     @Field("numero_cnh")
     @Indexed(unique = true)
-    private int numeroCNH;
+    private Long numeroCNH;
     private String telefone;
 
     private Endereco endereco;
