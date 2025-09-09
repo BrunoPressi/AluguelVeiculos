@@ -11,6 +11,7 @@ import org.bson.types.ObjectId;
 @NoArgsConstructor
 public class ClienteResponseDto {
 
+    private String id;
     private String nomeCompleto;
     private String email;
     private String telefone;

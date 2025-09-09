@@ -16,7 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Cliente {
 
     @Id
-    private ObjectId id;
+    private String id;
 
     @Field("nome_completo")
     private String nomeCompleto;
