@@ -17,6 +17,10 @@ public class ValidatorCNH implements ConstraintValidator<ValidCNH, String> {
             return false;
         }
 
+        if (cnh == null || cnh.length() != 11) {
+            return false; // CNH inválida
+        }
+
         int[] numeros = cnh.chars().map(c -> c - '0').toArray();
 
         int soma1 = 0;
