@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -32,19 +33,23 @@ public class ClienteController {
     @ResponseStatus(HttpStatus.CREATED)
     public EntityModel<ClienteResponseDto> createCliente(@RequestBody @Valid ClienteCreateDto clienteCreateDto) {
         ClienteResponseDto clienteResponseDto = clienteService.saveCliente(clienteCreateDto);
+
         Link selfLink = linkTo(methodOn(ClienteController.class).findClienteById(clienteResponseDto.getId())).withSelfRel();
         Link listLink = linkTo(methodOn(ClienteController.class).findAllClientes()).withRel("list");
+        Link deleteLink = linkTo(methodOn(ClienteController.class).deleteClienteById(clienteResponseDto.getId())).withRel("delete");
 
-        return EntityModel.of(clienteResponseDto, selfLink, listLink);
+        return EntityModel.of(clienteResponseDto, selfLink, listLink, deleteLink);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EntityModel<ClienteResponseDto> findClienteById(@PathVariable(name = "id") String id) {
         ClienteResponseDto clienteResponseDto = clienteService.findById(id);
-        Link listLink = linkTo(methodOn(ClienteController.class).findAllClientes()).withRel("list");
 
-        return EntityModel.of(clienteResponseDto, listLink);
+        Link listLink = linkTo(methodOn(ClienteController.class).findAllClientes()).withRel("list");
+        Link deleteLink = linkTo(methodOn(ClienteController.class).deleteClienteById(clienteResponseDto.getId())).withRel("delete");
+
+        return EntityModel.of(clienteResponseDto, listLink, deleteLink);
     }
 
     @GetMapping
@@ -54,9 +59,20 @@ public class ClienteController {
 
         List<EntityModel<ClienteResponseDto>> clientesModel = clientes.stream()
                 .map(cliente -> EntityModel.of(cliente,
-                    linkTo(methodOn(ClienteController.class).findClienteById(cliente.getId())).withSelfRel())).toList();
+                    linkTo(methodOn(ClienteController.class).findClienteById(cliente.getId())).withSelfRel(),
+                    linkTo(methodOn(ClienteController.class).deleteClienteById(cliente.getId())).withRel("delete")
+                ))
+                .toList();
 
         return CollectionModel.of(clientesModel);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Void> deleteClienteById(@PathVariable(name = "id") String id) {
+        clienteService.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -53,4 +53,9 @@ public class ClienteService {
 
         return ObjectMapper.parseObjectList(clienteList, ClienteResponseDto.class);
     }
+
+    public void deleteById(String id) {
+        findById(id);
+        clienteRepository.deleteById(id);
+    }
 }
