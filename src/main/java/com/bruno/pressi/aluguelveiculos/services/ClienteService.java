@@ -14,6 +14,8 @@ import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -46,4 +48,9 @@ public class ClienteService {
         return ObjectMapper.parseObject(cliente, ClienteResponseDto.class);
     }
 
+    public List<ClienteResponseDto> findAll() {
+        List<Cliente> clienteList = clienteRepository.findAll();
+
+        return ObjectMapper.parseObjectList(clienteList, ClienteResponseDto.class);
+    }
 }
