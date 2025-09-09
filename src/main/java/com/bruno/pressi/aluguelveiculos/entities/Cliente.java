@@ -29,7 +29,7 @@ public class Cliente {
 
     @Field("numero_cnh")
     @Indexed(unique = true)
-    private Long numeroCNH;
+    private String numeroCNH;
     private String telefone;
 
     private Endereco endereco;
