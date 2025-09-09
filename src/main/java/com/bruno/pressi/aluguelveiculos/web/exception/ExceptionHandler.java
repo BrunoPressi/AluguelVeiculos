@@ -1,5 +1,6 @@
 package com.bruno.pressi.aluguelveiculos.web.exception;
 
+import com.bruno.pressi.aluguelveiculos.exceptions.ClienteNotFoundException;
 import com.bruno.pressi.aluguelveiculos.exceptions.DuplicateClienteException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpRequest;
@@ -40,6 +41,19 @@ public class ExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorMessage);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(ClienteNotFoundException.class)
+    public ResponseEntity<ErrorMessage> clienteNotFoundException(HttpServletRequest request, RuntimeException e) {
+
+        ErrorMessage errorMessage = new ErrorMessage();
+        errorMessage.setTimestamp(LocalDateTime.now());
+        errorMessage.setPath(request.getRequestURI());
+        errorMessage.setStatusCode(HttpStatus.NOT_FOUND.value());
+        errorMessage.setStatusMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
+        errorMessage.setErrorMessage(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 
 }
