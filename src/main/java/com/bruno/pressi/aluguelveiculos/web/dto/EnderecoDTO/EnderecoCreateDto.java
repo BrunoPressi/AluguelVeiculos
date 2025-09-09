@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 public class EnderecoCreateDto {
 
     @NotBlank(message = "CEP inválido, tente novamente.")
-    @Pattern(regexp = "^(?=.{2,100}$)[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[ '-][A-Za-zÀ-ÖØ-öø-ÿ]{2,})*$", message = "CEP inválido, tente novamente.")
+    @Pattern(regexp = "^\\d{5}-?\\d{3}$", message = "CEP inválido, tente novamente.")
     private String cep;
 
     @NotBlank(message = "Nome da rua inválida, tente novamente.")
-    @Pattern(regexp = "Rua inválida, tente novamente.")
+    @Pattern(regexp = "^(?=.{2,100}$)[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[ '-][A-Za-zÀ-ÖØ-öø-ÿ]{2,})*$",message = "Rua inválida, tente novamente.")
     private String rua;
 
     @NotBlank(message = "Nome do bairro inválido, tente novamente.")
