@@ -14,6 +14,8 @@ public class ClienteResponseDto {
     private String id;
     private String nomeCompleto;
     private String email;
+    private String cpf;
+    private String numeroCNH;
     private String telefone;
 
     private EnderecoResponseDto endereco;
