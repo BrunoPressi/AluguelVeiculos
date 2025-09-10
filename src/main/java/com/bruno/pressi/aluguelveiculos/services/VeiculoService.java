@@ -2,6 +2,7 @@ package com.bruno.pressi.aluguelveiculos.services;
 
 import com.bruno.pressi.aluguelveiculos.entities.Veiculo;
 import com.bruno.pressi.aluguelveiculos.exceptions.DuplicateEntityException;
+import com.bruno.pressi.aluguelveiculos.exceptions.EntityNotFoundException;
 import com.bruno.pressi.aluguelveiculos.repositories.VeiculoRepository;
 import com.bruno.pressi.aluguelveiculos.web.dto.VeiculoDTO.VeiculoCreateDto;
 import com.bruno.pressi.aluguelveiculos.web.dto.VeiculoDTO.VeiculoResponseDto;
@@ -29,6 +30,15 @@ public class VeiculoService {
             String details = msg.substring(msg.indexOf("dup key: ") + 8, msg.indexOf("details") - 3).trim();
             throw new DuplicateEntityException("Veiculo já existe: " + details);
         }
+
+        return ObjectMapper.parseObject(veiculo, VeiculoResponseDto.class);
+    }
+
+    @Transactional(readOnly = true)
+    public VeiculoResponseDto findById(String id) {
+        Veiculo veiculo = veiculoRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Veiculo não encontrado.")
+        );
 
         return ObjectMapper.parseObject(veiculo, VeiculoResponseDto.class);
     }
