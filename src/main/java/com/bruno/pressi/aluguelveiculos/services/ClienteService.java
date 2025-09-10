@@ -6,6 +6,7 @@ import com.bruno.pressi.aluguelveiculos.exceptions.DuplicateClienteException;
 import com.bruno.pressi.aluguelveiculos.repositories.ClienteRepository;
 import com.bruno.pressi.aluguelveiculos.web.dto.ClienteDTO.ClienteCreateDto;
 import com.bruno.pressi.aluguelveiculos.web.dto.ClienteDTO.ClienteResponseDto;
+import com.bruno.pressi.aluguelveiculos.web.dto.ClienteDTO.ClienteUpdateDto;
 import com.bruno.pressi.aluguelveiculos.web.dto.mapper.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -48,14 +49,35 @@ public class ClienteService {
         return ObjectMapper.parseObject(cliente, ClienteResponseDto.class);
     }
 
+    @Transactional(readOnly = true)
     public List<ClienteResponseDto> findAll() {
         List<Cliente> clienteList = clienteRepository.findAll();
 
         return ObjectMapper.parseObjectList(clienteList, ClienteResponseDto.class);
     }
 
+    @Transactional(readOnly = false)
     public void deleteById(String id) {
         findById(id);
         clienteRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = false)
+    public ClienteResponseDto updateById(String id, ClienteUpdateDto clienteUpdateDto) {
+        Cliente cliente = clienteRepository.findById(id).orElseThrow(
+                () -> new ClienteNotFoundException("Cliente não encontrado")
+        );
+
+        Cliente clienteNovo = ObjectMapper.parseObject(clienteUpdateDto, Cliente.class);
+        cliente.setNomeCompleto(clienteNovo.getNomeCompleto());
+        cliente.setEmail(clienteNovo.getEmail());
+        cliente.setCpf(clienteNovo.getCpf());
+        cliente.setNumeroCNH(clienteNovo.getNumeroCNH());
+        cliente.setTelefone(clienteNovo.getTelefone());
+        cliente.setEndereco(clienteNovo.getEndereco());
+
+        clienteRepository.save(cliente);
+
+        return ObjectMapper.parseObject(cliente, ClienteResponseDto.class);
     }
 }
