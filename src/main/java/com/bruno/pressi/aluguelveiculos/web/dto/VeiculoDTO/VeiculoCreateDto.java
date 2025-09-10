@@ -31,6 +31,6 @@ public class VeiculoCreateDto {
     private String placa;
 
     @Pattern(regexp = "^(DISPONIVEL|INDISPONIVEL)$", message = "Status deve ser DISPONIVEL ou INDISPONIVEL")
-    private VeiculoStatus status;
+    private String status;
 
 }

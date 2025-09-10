@@ -4,6 +4,7 @@ import com.bruno.pressi.aluguelveiculos.services.VeiculoService;
 import com.bruno.pressi.aluguelveiculos.web.dto.VeiculoDTO.VeiculoCreateDto;
 import com.bruno.pressi.aluguelveiculos.web.dto.VeiculoDTO.VeiculoResponseDto;
 import com.bruno.pressi.aluguelveiculos.web.dto.VeiculoDTO.VeiculoUpdateDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -24,7 +25,7 @@ public class VeiculoController {
     private final VeiculoService veiculoService;
 
     @PostMapping
-    public ResponseEntity<EntityModel<VeiculoResponseDto>> createVeiculo(@RequestBody VeiculoCreateDto veiculoCreateDto) {
+    public ResponseEntity<EntityModel<VeiculoResponseDto>> createVeiculo(@RequestBody @Valid VeiculoCreateDto veiculoCreateDto) {
         VeiculoResponseDto veiculoResponseDto = veiculoService.saveVeiculo(veiculoCreateDto);
 
         Link selfLink = linkTo(methodOn(VeiculoController.class).findVeiculoById(veiculoResponseDto.getId())).withSelfRel();
@@ -69,7 +70,7 @@ public class VeiculoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EntityModel<VeiculoResponseDto>> updateVeiculoById(@PathVariable(name = "id") String id, @RequestBody VeiculoUpdateDto veiculoUpdateDto) {
+    public ResponseEntity<EntityModel<VeiculoResponseDto>> updateVeiculoById(@PathVariable(name = "id") String id, @RequestBody @Valid VeiculoUpdateDto veiculoUpdateDto) {
         VeiculoResponseDto veiculoResponseDto = veiculoService.updateById(id, veiculoUpdateDto);
 
         Link selfLink = linkTo(methodOn(VeiculoController.class).findVeiculoById(veiculoResponseDto.getId())).withSelfRel();
