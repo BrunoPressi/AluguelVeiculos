@@ -28,8 +28,9 @@ public class VeiculoController {
 
         Link selfLink = linkTo(methodOn(VeiculoController.class).findVeiculoById(veiculoResponseDto.getId())).withSelfRel();
         Link listLink = linkTo(methodOn(VeiculoController.class).findAllVeiculos()).withRel("list");
+        Link deleteLink = linkTo(methodOn(VeiculoController.class).deleteVeiculoById(veiculoResponseDto.getId())).withRel("delete").withType("delete");
 
-        return ResponseEntity.created(selfLink.toUri()).body(EntityModel.of(veiculoResponseDto, selfLink, listLink));
+        return ResponseEntity.created(selfLink.toUri()).body(EntityModel.of(veiculoResponseDto, selfLink, listLink, deleteLink));
     }
 
     @GetMapping("/{id}")
@@ -37,8 +38,9 @@ public class VeiculoController {
         VeiculoResponseDto veiculoResponseDto = veiculoService.findById(id);
 
         Link listLink = linkTo(methodOn(VeiculoController.class).findAllVeiculos()).withRel("list");
+        Link deleteLink = linkTo(methodOn(VeiculoController.class).deleteVeiculoById(veiculoResponseDto.getId())).withRel("delete").withType("delete");
 
-        return ResponseEntity.ok(EntityModel.of(veiculoResponseDto, listLink));
+        return ResponseEntity.ok(EntityModel.of(veiculoResponseDto, listLink, deleteLink));
     }
 
     @GetMapping
@@ -47,10 +49,19 @@ public class VeiculoController {
 
         List<EntityModel<VeiculoResponseDto>> veiculos = veiculoResponseDtoList.stream().map(
                 (veiculo) -> EntityModel.of(veiculo,
-                    linkTo(methodOn(VeiculoController.class).findVeiculoById(veiculo.getId())).withSelfRel()
+                    linkTo(methodOn(VeiculoController.class).findVeiculoById(veiculo.getId())).withSelfRel(),
+                    linkTo(methodOn(VeiculoController.class).deleteVeiculoById(veiculo.getId())).withRel("delete").withType("delete")
+
         )).toList();
 
         return ResponseEntity.ok(CollectionModel.of(veiculos));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVeiculoById(@PathVariable(name = "id") String id) {
+        veiculoService.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 

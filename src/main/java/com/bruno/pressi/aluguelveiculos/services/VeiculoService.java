@@ -51,4 +51,11 @@ public class VeiculoService {
 
         return ObjectMapper.parseObjectList(veiculosList, VeiculoResponseDto.class);
     }
+
+    @Transactional(readOnly = false)
+    public void deleteById(String id) {
+        findById(id);
+
+        veiculoRepository.deleteById(id);
+    }
 }
