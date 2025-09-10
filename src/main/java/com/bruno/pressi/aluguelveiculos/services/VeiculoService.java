@@ -6,6 +6,7 @@ import com.bruno.pressi.aluguelveiculos.exceptions.EntityNotFoundException;
 import com.bruno.pressi.aluguelveiculos.repositories.VeiculoRepository;
 import com.bruno.pressi.aluguelveiculos.web.dto.VeiculoDTO.VeiculoCreateDto;
 import com.bruno.pressi.aluguelveiculos.web.dto.VeiculoDTO.VeiculoResponseDto;
+import com.bruno.pressi.aluguelveiculos.web.dto.VeiculoDTO.VeiculoUpdateDto;
 import com.bruno.pressi.aluguelveiculos.web.dto.mapper.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
@@ -57,5 +58,24 @@ public class VeiculoService {
         findById(id);
 
         veiculoRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = false)
+    public VeiculoResponseDto updateById(String id, VeiculoUpdateDto veiculoUpdateDto) {
+        Veiculo veiculo = veiculoRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Veiculo não encontrado")
+        );
+
+        Veiculo veiculoNovo = ObjectMapper.parseObject(veiculoUpdateDto, Veiculo.class);
+        veiculo.setModelo(veiculoNovo.getModelo());
+        veiculo.setMarca(veiculoNovo.getMarca());
+        veiculo.setAno(veiculoNovo.getAno());
+        veiculo.setCor(veiculoNovo.getCor());
+        veiculo.setPlaca(veiculoNovo.getPlaca());
+        veiculo.setStatus(veiculoNovo.getStatus());
+
+        veiculoRepository.save(veiculo);
+
+        return ObjectMapper.parseObject(veiculo, VeiculoResponseDto.class);
     }
 }
