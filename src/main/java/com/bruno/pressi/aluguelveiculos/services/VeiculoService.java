@@ -1,8 +1,15 @@
 package com.bruno.pressi.aluguelveiculos.services;
 
+import com.bruno.pressi.aluguelveiculos.entities.Veiculo;
+import com.bruno.pressi.aluguelveiculos.exceptions.DuplicateEntityException;
 import com.bruno.pressi.aluguelveiculos.repositories.VeiculoRepository;
+import com.bruno.pressi.aluguelveiculos.web.dto.VeiculoDTO.VeiculoCreateDto;
+import com.bruno.pressi.aluguelveiculos.web.dto.VeiculoDTO.VeiculoResponseDto;
+import com.bruno.pressi.aluguelveiculos.web.dto.mapper.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -10,4 +17,19 @@ public class VeiculoService {
 
     private final VeiculoRepository veiculoRepository;
 
+    @Transactional(readOnly = false)
+    public VeiculoResponseDto saveVeiculo(VeiculoCreateDto veiculoCreateDto) {
+        Veiculo veiculo = ObjectMapper.parseObject(veiculoCreateDto, Veiculo.class);
+
+        try {
+            veiculoRepository.insert(veiculo);
+        }
+        catch (DuplicateKeyException e) {
+            String msg = e.getMessage();
+            String details = msg.substring(msg.indexOf("dup key: ") + 8, msg.indexOf("details") - 3).trim();
+            throw new DuplicateEntityException("Veiculo já existe: " + details);
+        }
+
+        return ObjectMapper.parseObject(veiculo, VeiculoResponseDto.class);
+    }
 }

@@ -1,17 +1,15 @@
 package com.bruno.pressi.aluguelveiculos.services;
 
 import com.bruno.pressi.aluguelveiculos.entities.Cliente;
-import com.bruno.pressi.aluguelveiculos.exceptions.ClienteNotFoundException;
-import com.bruno.pressi.aluguelveiculos.exceptions.DuplicateClienteException;
+import com.bruno.pressi.aluguelveiculos.exceptions.EntityNotFoundException;
+import com.bruno.pressi.aluguelveiculos.exceptions.DuplicateEntityException;
 import com.bruno.pressi.aluguelveiculos.repositories.ClienteRepository;
 import com.bruno.pressi.aluguelveiculos.web.dto.ClienteDTO.ClienteCreateDto;
 import com.bruno.pressi.aluguelveiculos.web.dto.ClienteDTO.ClienteResponseDto;
 import com.bruno.pressi.aluguelveiculos.web.dto.ClienteDTO.ClienteUpdateDto;
 import com.bruno.pressi.aluguelveiculos.web.dto.mapper.ObjectMapper;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +32,7 @@ public class ClienteService {
         catch (org.springframework.dao.DuplicateKeyException e) {
             String msg = e.getMessage();
             String details = msg.substring(msg.indexOf("dup key: ") + 8, msg.indexOf("details") - 3).trim();
-            throw new DuplicateClienteException("Cliente já registrado: " + details);
+            throw new DuplicateEntityException("Cliente já registrado: " + details);
         }
 
         return ObjectMapper.parseObject(cliente, ClienteResponseDto.class);
@@ -43,7 +41,7 @@ public class ClienteService {
     @Transactional(readOnly = true)
     public ClienteResponseDto findById(String id) {
         Cliente cliente = clienteRepository.findById(id).orElseThrow(
-                () -> new ClienteNotFoundException("Cliente não encontrado.")
+                () -> new EntityNotFoundException("Cliente não encontrado.")
         );
 
         return ObjectMapper.parseObject(cliente, ClienteResponseDto.class);
@@ -65,7 +63,7 @@ public class ClienteService {
     @Transactional(readOnly = false)
     public ClienteResponseDto updateById(String id, ClienteUpdateDto clienteUpdateDto) {
         Cliente cliente = clienteRepository.findById(id).orElseThrow(
-                () -> new ClienteNotFoundException("Cliente não encontrado")
+                () -> new EntityNotFoundException("Cliente não encontrado")
         );
 
         Cliente clienteNovo = ObjectMapper.parseObject(clienteUpdateDto, Cliente.class);

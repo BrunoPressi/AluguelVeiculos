@@ -1,9 +1,8 @@
 package com.bruno.pressi.aluguelveiculos.web.exception;
 
-import com.bruno.pressi.aluguelveiculos.exceptions.ClienteNotFoundException;
-import com.bruno.pressi.aluguelveiculos.exceptions.DuplicateClienteException;
+import com.bruno.pressi.aluguelveiculos.exceptions.EntityNotFoundException;
+import com.bruno.pressi.aluguelveiculos.exceptions.DuplicateEntityException;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,7 +14,7 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class ExceptionHandler {
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(DuplicateClienteException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(DuplicateEntityException.class)
     public ResponseEntity<ErrorMessage> duplicateClienteException(HttpServletRequest request, RuntimeException e) {
 
         ErrorMessage errorMessage = new ErrorMessage();
@@ -43,7 +42,7 @@ public class ExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorMessage);
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(ClienteNotFoundException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorMessage> clienteNotFoundException(HttpServletRequest request, RuntimeException e) {
 
         ErrorMessage errorMessage = new ErrorMessage();
