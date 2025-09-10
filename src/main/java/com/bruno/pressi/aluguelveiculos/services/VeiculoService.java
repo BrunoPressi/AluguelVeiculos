@@ -12,6 +12,8 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class VeiculoService {
@@ -41,5 +43,12 @@ public class VeiculoService {
         );
 
         return ObjectMapper.parseObject(veiculo, VeiculoResponseDto.class);
+    }
+
+    @Transactional(readOnly = true)
+    public List<VeiculoResponseDto> findAll() {
+        List<Veiculo> veiculosList = veiculoRepository.findAll();
+
+        return ObjectMapper.parseObjectList(veiculosList, VeiculoResponseDto.class);
     }
 }
