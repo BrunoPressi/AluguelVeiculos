@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
@@ -31,6 +32,14 @@ public class Aluguel {
     @Field(name = "valor_total")
     private double valorTotal;
     private AluguelStatus status;
+
+    @Field(name = "cliente_id")
+    @DocumentReference(lazy = true)
+    private Cliente clienteId;
+
+    @Field(name = "veiculo_id")
+    @DocumentReference(lazy = true)
+    private Veiculo veiculoId;
 
     private Pagamento pagamento;
 

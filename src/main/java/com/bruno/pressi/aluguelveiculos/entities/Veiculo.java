@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -24,4 +27,7 @@ public class Veiculo {
     @Indexed(unique = true)
     private String placa;
     private VeiculoStatus status;
+
+    @DocumentReference(lazy = true)
+    private List<Aluguel> alugueis;
 }
