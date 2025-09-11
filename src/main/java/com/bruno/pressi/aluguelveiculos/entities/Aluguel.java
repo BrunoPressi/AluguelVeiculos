@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -21,10 +22,10 @@ public class Aluguel {
     private String id;
 
     @Field(name = "data_inicio")
-    private LocalDateTime dataInicio;
+    private LocalDate dataInicio;
 
     @Field(name = "data_fim")
-    private LocalDateTime dataFim;
+    private LocalDate dataFim;
 
     @Field(name = "valor_diaria")
     private double valorDiaria;
