@@ -32,4 +32,6 @@ public class Aluguel {
     private double valorTotal;
     private AluguelStatus status;
 
+    private Pagamento pagamento;
+
 }
