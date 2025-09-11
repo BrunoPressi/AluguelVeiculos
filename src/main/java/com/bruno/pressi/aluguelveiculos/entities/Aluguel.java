@@ -1,0 +1,35 @@
+package com.bruno.pressi.aluguelveiculos.entities;
+
+import com.bruno.pressi.aluguelveiculos.entities.enums.AluguelStatus;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.time.LocalDateTime;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Document(collation = "alugueis")
+public class Aluguel {
+
+    @Id
+    private String id;
+
+    @Field(name = "data_inicio")
+    private LocalDateTime dataInicio;
+
+    @Field(name = "data_fim")
+    private LocalDateTime dataFim;
+
+    @Field(name = "valor_diaria")
+    private double valorDiaria;
+
+    @Field(name = "valor_total")
+    private double valorTotal;
+    private AluguelStatus status;
+
+}
