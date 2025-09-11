@@ -2,6 +2,7 @@ package com.bruno.pressi.aluguelveiculos.web.exception;
 
 import com.bruno.pressi.aluguelveiculos.exceptions.EntityNotFoundException;
 import com.bruno.pressi.aluguelveiculos.exceptions.DuplicateEntityException;
+import com.bruno.pressi.aluguelveiculos.exceptions.VeiculoIndisponivelException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,4 +56,16 @@ public class ExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(VeiculoIndisponivelException.class)
+    public ResponseEntity<ErrorMessage> veiculoIndisponivelException(HttpServletRequest request, RuntimeException e) {
+
+        ErrorMessage errorMessage = new ErrorMessage();
+        errorMessage.setTimestamp(LocalDateTime.now());
+        errorMessage.setPath(request.getRequestURI());
+        errorMessage.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        errorMessage.setStatusMessage(HttpStatus.BAD_REQUEST.getReasonPhrase());
+        errorMessage.setErrorMessage(e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+    }
 }

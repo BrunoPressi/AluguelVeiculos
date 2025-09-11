@@ -1,6 +1,7 @@
 package com.bruno.pressi.aluguelveiculos.services;
 
 import com.bruno.pressi.aluguelveiculos.entities.Veiculo;
+import com.bruno.pressi.aluguelveiculos.entities.enums.VeiculoStatus;
 import com.bruno.pressi.aluguelveiculos.exceptions.DuplicateEntityException;
 import com.bruno.pressi.aluguelveiculos.exceptions.EntityNotFoundException;
 import com.bruno.pressi.aluguelveiculos.repositories.VeiculoRepository;
@@ -77,5 +78,11 @@ public class VeiculoService {
         veiculoRepository.save(veiculo);
 
         return ObjectMapper.parseObject(veiculo, VeiculoResponseDto.class);
+    }
+
+    @Transactional(readOnly = false)
+    public void updateStatus(Veiculo veiculo) {
+        veiculo.setStatus(VeiculoStatus.INDISPONIVEL);
+        veiculoRepository.save(veiculo);
     }
 }
