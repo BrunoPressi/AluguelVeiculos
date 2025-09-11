@@ -35,11 +35,11 @@ public class Aluguel {
 
     @Field(name = "cliente_id")
     @DocumentReference(lazy = true)
-    private Cliente clienteId;
+    private Cliente cliente;
 
     @Field(name = "veiculo_id")
     @DocumentReference(lazy = true)
-    private Veiculo veiculoId;
+    private Veiculo veiculo;
 
     private Pagamento pagamento;
 
