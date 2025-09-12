@@ -27,6 +27,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ClienteController {
 
     private final ClienteService clienteService;
+    private final AluguelController aluguelController;
 
     @PostMapping
     public ResponseEntity<EntityModel<ClienteResponseDto>> createCliente(@RequestBody @Valid ClienteCreateDto clienteCreateDto) {
@@ -36,8 +37,9 @@ public class ClienteController {
         Link listLink = linkTo(methodOn(ClienteController.class).findAllClientes()).withRel("list");
         Link deleteLink = linkTo(methodOn(ClienteController.class).deleteClienteById(clienteResponseDto.getId())).withRel("delete").withType("delete");
         Link updateLink = linkTo(methodOn(ClienteController.class).updateClienteById(clienteResponseDto.getId(), null)).withRel("update").withType("update");
+        Link aluguelLink = linkTo(methodOn(AluguelController.class).createAluguel(null, clienteResponseDto.getId())).withRel("novo-aluguel").withType("post");
 
-        return ResponseEntity.created(selfLink.toUri()).body(EntityModel.of(clienteResponseDto, selfLink, listLink, deleteLink, updateLink));
+        return ResponseEntity.created(selfLink.toUri()).body(EntityModel.of(clienteResponseDto, selfLink, listLink, deleteLink, updateLink, aluguelLink));
     }
 
     @GetMapping("/{id}")

@@ -64,7 +64,7 @@ public class AluguelService {
         aluguel.setCliente(cliente);
         aluguel.setVeiculo(veiculo);
 
-        Pagamento pagamento = processPagamento(aluguelCreateDto, valorTotal);
+        Pagamento pagamento = processPagamento(MetodoPagamento.valueOf(aluguelCreateDto.getMetodoPagamento()), valorTotal, aluguelCreateDto.getNumeroParcelas());
         aluguel.setPagamento(pagamento);
 
         List<Parcela> parcelas = processParcelas(pagamento.getNumeroParcelas(), pagamento.getTotal(), aluguel.getDataInicio());
@@ -73,14 +73,10 @@ public class AluguelService {
         return  aluguel;
     }
 
-    private final Pagamento processPagamento(AluguelCreateDto aluguelCreateDto, double valorTotal) {
+    private final Pagamento processPagamento(MetodoPagamento metodoPagamento, double valorTotal, int numeroParcelas) {
         Pagamento pagamento = new Pagamento();
 
-        double valor = valorTotal;
-        MetodoPagamento metodo = MetodoPagamento.valueOf(aluguelCreateDto.getMetodoPagamento());
-        int numeroParcelas = aluguelCreateDto.getNumeroParcelas();
-
-        pagamento.setMetodo(metodo);
+        pagamento.setMetodo(metodoPagamento);
         pagamento.setNumeroParcelas(numeroParcelas);
         pagamento.setDesconto(DESCONTO);
         pagamento.setTotal(valorTotal - DESCONTO);
@@ -90,7 +86,7 @@ public class AluguelService {
 
     private final List<Parcela> processParcelas(int numeroParcelas, double valorPagamento, LocalDate dataInicio) {
         List<Parcela> parcelas = new ArrayList<>();
-        for (int i = 0; i < numeroParcelas; i++) {
+        for (int i = 1; i <= numeroParcelas; i++) {
             Parcela parcela = new Parcela();
 
             double valorParcela = valorPagamento / numeroParcelas;

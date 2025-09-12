@@ -17,7 +17,7 @@ public class AluguelController {
     private final AluguelService aluguelService;
 
     @PostMapping("/{cliente_id}")
-    private ResponseEntity<EntityModel<AluguelResponseDto>> createAluguel(@RequestBody @Valid AluguelCreateDto aluguelCreateDto, @PathVariable(name = "cliente_id") String clienteId) {
+    public ResponseEntity<EntityModel<AluguelResponseDto>> createAluguel(@RequestBody @Valid AluguelCreateDto aluguelCreateDto, @PathVariable(name = "cliente_id") String clienteId) {
         AluguelResponseDto aluguelResponseDto = aluguelService.saveAluguel(aluguelCreateDto, clienteId);
 
         return ResponseEntity.created(null).body(EntityModel.of(aluguelResponseDto));
