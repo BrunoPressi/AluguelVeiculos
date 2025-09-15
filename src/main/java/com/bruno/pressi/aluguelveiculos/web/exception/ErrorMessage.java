@@ -27,7 +27,7 @@ public class ErrorMessage {
     private String statusMessage;
     private String errorMessage;
 
-    private Map<String, String> fieldErrors = new HashMap<>();
+    private Map<String, String> Errors = new HashMap<>();
 
     public ErrorMessage(LocalDateTime timestamp, String errorMessage, String statusMessage, int statusCode, String path) {
         this.timestamp = timestamp;
@@ -47,10 +47,15 @@ public class ErrorMessage {
     }
 
     private final void addErrors(BindingResult bindingResult) {
-        List<FieldError> allErrors = bindingResult.getFieldErrors();
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        List<ObjectError> globalErrors = bindingResult.getGlobalErrors();
 
-        for (FieldError e : allErrors) {
-            fieldErrors.put(e.getField(), e.getDefaultMessage());
+        for (FieldError e : fieldErrors) {
+            Errors.put(e.getField(), e.getDefaultMessage());
+        }
+
+        for (ObjectError e : globalErrors) {
+            Errors.put(e.getObjectName(), e.getDefaultMessage());
         }
     }
 }

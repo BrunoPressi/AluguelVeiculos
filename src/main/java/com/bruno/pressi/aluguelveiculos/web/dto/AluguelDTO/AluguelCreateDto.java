@@ -1,5 +1,6 @@
 package com.bruno.pressi.aluguelveiculos.web.dto.AluguelDTO;
 
+import com.bruno.pressi.aluguelveiculos.constraints.ValidDataFinal;
 import com.bruno.pressi.aluguelveiculos.entities.Veiculo;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -11,15 +12,18 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ValidDataFinal()
 public class AluguelCreateDto {
 
     @NotBlank(message = "Id do veiculo inválido, tente novamente.")
     private String veiculoId;
 
+    @NotNull(message = "A data de início não pode ser vazia.")
     @FutureOrPresent(message = "A data de início não pode ser no passado.")
     private LocalDate dataInicio;
 
-    @Future(message = "A data de início deve ser no futuro.")
+    @NotNull(message = "A data final não pode ser vazia.")
+    @Future(message = "A data final deve ser no futuro.")
     private LocalDate dataFim;
 
     @NotBlank(message = "Método de pagamento inválido, tente novamente.")
