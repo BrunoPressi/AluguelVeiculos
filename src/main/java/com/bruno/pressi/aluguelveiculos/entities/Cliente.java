@@ -37,7 +37,4 @@ public class Cliente {
 
     private Endereco endereco;
 
-    @DocumentReference(lazy = true)
-    private List<Aluguel> alugueis;
-
 }

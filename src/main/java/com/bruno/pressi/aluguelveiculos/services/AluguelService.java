@@ -53,8 +53,6 @@ public class AluguelService {
         AluguelStatus aluguelStatus = AluguelStatus.ATIVO;
 
         Veiculo veiculo = verifyVeiculoExistsAndAvailable(aluguelCreateDto.getVeiculoId());
-        veiculoService.updateStatus(veiculo);
-
         Cliente cliente = verifyClienteExists(clienteId);
 
         aluguel.setDataInicio(dataInicio);
@@ -71,6 +69,7 @@ public class AluguelService {
         List<Parcela> parcelas = processParcelas(pagamento.getNumeroParcelas(), pagamento.getTotal(), aluguel.getDataInicio());
         pagamento.setParcelas(parcelas);
 
+        veiculoService.updateStatus(veiculo);
         return  aluguel;
     }
 

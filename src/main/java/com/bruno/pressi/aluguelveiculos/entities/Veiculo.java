@@ -28,6 +28,4 @@ public class Veiculo {
     private String placa;
     private VeiculoStatus status;
 
-    @DocumentReference(lazy = true)
-    private List<Aluguel> alugueis;
 }
