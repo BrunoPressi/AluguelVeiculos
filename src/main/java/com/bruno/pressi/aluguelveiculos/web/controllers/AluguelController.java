@@ -56,4 +56,17 @@ public class AluguelController {
         return ResponseEntity.ok(CollectionModel.of(aluguelModel));
     }
 
+    @GetMapping("/cliente/{cliente_id}")
+    public ResponseEntity<CollectionModel<EntityModel<AluguelResponseDto>>> findAlugueisByClienteId(@PathVariable(name = "cliente_id") String clienteId) {
+        List<AluguelResponseDto> aluguelResponseDtoList = aluguelService.findByClienteId(clienteId);
+
+        List<EntityModel<AluguelResponseDto>> aluguelModel = aluguelResponseDtoList.stream()
+                .map(aluguel -> EntityModel.of(aluguel,
+                        linkTo(methodOn(AluguelController.class).findAluguelById(aluguel.getId())).withSelfRel()
+                        ))
+                .toList();
+
+        return ResponseEntity.ok(CollectionModel.of(aluguelModel));
+    }
+
 }

@@ -135,4 +135,13 @@ public class AluguelService {
 
         return ObjectMapper.parseObjectList(aluguelList, AluguelResponseDto.class);
     }
+
+    @Transactional(readOnly = true)
+    public List<AluguelResponseDto> findByClienteId(String clienteId) {
+        List<Aluguel> aluguelList = aluguelRepository.findByClienteId(clienteId).orElseThrow(
+                () -> new EntityNotFoundException("Cliente não encontrado.")
+        );
+
+        return ObjectMapper.parseObjectList(aluguelList, AluguelResponseDto.class);
+    }
 }

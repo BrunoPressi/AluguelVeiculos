@@ -38,8 +38,9 @@ public class ClienteController {
         Link deleteLink = linkTo(methodOn(ClienteController.class).deleteClienteById(clienteResponseDto.getId())).withRel("delete").withType("delete");
         Link updateLink = linkTo(methodOn(ClienteController.class).updateClienteById(clienteResponseDto.getId(), null)).withRel("update").withType("update");
         Link aluguelLink = linkTo(methodOn(AluguelController.class).createAluguel(null, clienteResponseDto.getId())).withRel("novo-aluguel").withType("post");
+        Link findAluguelLink = linkTo(methodOn(AluguelController.class).findAlugueisByClienteId(clienteResponseDto.getId())).withSelfRel();
 
-        return ResponseEntity.created(selfLink.toUri()).body(EntityModel.of(clienteResponseDto, selfLink, listLink, deleteLink, updateLink, aluguelLink));
+        return ResponseEntity.created(selfLink.toUri()).body(EntityModel.of(clienteResponseDto, selfLink, listLink, deleteLink, updateLink, aluguelLink, findAluguelLink));
     }
 
     @GetMapping("/{id}")
