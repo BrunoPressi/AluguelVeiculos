@@ -104,6 +104,7 @@ public class AluguelService {
         return  parcelas;
     }
 
+    @Transactional(readOnly = true)
     private final Veiculo verifyVeiculoExistsAndAvailable(String veiculoId) {
         VeiculoResponseDto veiculoResponseDto = veiculoService.findById(veiculoId);
         Veiculo veiculo = ObjectMapper.parseObject(veiculoResponseDto, Veiculo.class);
@@ -113,6 +114,7 @@ public class AluguelService {
         return veiculo;
     }
 
+    @Transactional(readOnly = true)
     private final Cliente verifyClienteExists(String clienteId) {
         ClienteResponseDto clienteResponseDto = clienteService.findById(clienteId);
         return ObjectMapper.parseObject(clienteResponseDto, Cliente.class);
@@ -125,5 +127,12 @@ public class AluguelService {
         );
 
         return ObjectMapper.parseObject(aluguel, AluguelResponseDto.class);
+    }
+
+    @Transactional(readOnly = true)
+    public List<AluguelResponseDto> findAll() {
+        List<Aluguel> aluguelList = aluguelRepository.findAll();
+
+        return ObjectMapper.parseObjectList(aluguelList, AluguelResponseDto.class);
     }
 }
