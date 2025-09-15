@@ -5,6 +5,7 @@ import com.bruno.pressi.aluguelveiculos.entities.enums.AluguelStatus;
 import com.bruno.pressi.aluguelveiculos.entities.enums.MetodoPagamento;
 import com.bruno.pressi.aluguelveiculos.entities.enums.ParcelaStatus;
 import com.bruno.pressi.aluguelveiculos.entities.enums.VeiculoStatus;
+import com.bruno.pressi.aluguelveiculos.exceptions.EntityNotFoundException;
 import com.bruno.pressi.aluguelveiculos.exceptions.VeiculoIndisponivelException;
 import com.bruno.pressi.aluguelveiculos.repositories.AluguelRepository;
 import com.bruno.pressi.aluguelveiculos.web.dto.AluguelDTO.AluguelCreateDto;
@@ -117,4 +118,12 @@ public class AluguelService {
         return ObjectMapper.parseObject(clienteResponseDto, Cliente.class);
     }
 
+    @Transactional(readOnly = true)
+    public AluguelResponseDto findById(String id) {
+        Aluguel aluguel = aluguelRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Aluguel não encontrado.")
+        );
+
+        return ObjectMapper.parseObject(aluguel, AluguelResponseDto.class);
+    }
 }

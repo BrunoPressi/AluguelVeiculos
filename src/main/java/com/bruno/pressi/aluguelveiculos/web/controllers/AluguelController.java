@@ -6,8 +6,12 @@ import com.bruno.pressi.aluguelveiculos.web.dto.AluguelDTO.AluguelResponseDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/v1/aluguel")
@@ -20,7 +24,16 @@ public class AluguelController {
     public ResponseEntity<EntityModel<AluguelResponseDto>> createAluguel(@RequestBody @Valid AluguelCreateDto aluguelCreateDto, @PathVariable(name = "cliente_id") String clienteId) {
         AluguelResponseDto aluguelResponseDto = aluguelService.saveAluguel(aluguelCreateDto, clienteId);
 
-        return ResponseEntity.created(null).body(EntityModel.of(aluguelResponseDto));
+        Link selfLink = linkTo(methodOn(AluguelController.class).findAluguelById(aluguelResponseDto.getId())).withSelfRel();
+
+        return ResponseEntity.created(selfLink.toUri()).body(EntityModel.of(aluguelResponseDto, selfLink));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EntityModel<AluguelResponseDto>> findAluguelById(@PathVariable(name = "id") String id) {
+        AluguelResponseDto aluguelResponseDto = aluguelService.findById(id);
+
+        return ResponseEntity.ok(EntityModel.of(aluguelResponseDto));
     }
 
 }

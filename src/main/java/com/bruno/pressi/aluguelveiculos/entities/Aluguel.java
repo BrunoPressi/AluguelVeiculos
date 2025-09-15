@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collation = "alugueis")
+@Document(collection = "alugueis")
 public class Aluguel {
 
     @Id
